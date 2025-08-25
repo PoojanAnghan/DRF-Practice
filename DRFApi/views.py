@@ -1,87 +1,51 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from DRFApi.serializers import StudentSerializer
 from DRFApi.models import Student
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
-from django.http import HttpResponse, JsonResponse
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.views.decorators.csrf import csrf_exempt
-import json
-import io
+from rest_framework import status
 
-# Create your views here.
-def student_details(request, pk): 
-    Stu = Student.objects.get(id=pk)
-    # print(Stu)
 
-    serialized = StudentSerializer(Stu)
-    # print(serialized)
-    
-    # json_data = JSONRenderer().render(serialized.data)
-    # print(json_data)
-    # return HttpResponse(json_data, content_type='application/json')
-    return JsonResponse(serialized.data, safe=True)
+# ---------------- Single Student (GET by ID) ----------------
+class StudentDetailAPI(APIView):
+    def get(self, request, pk, format=None):
+        stu = get_object_or_404(Student, id=pk)
+        serializer = StudentSerializer(stu)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-def student_list(request): 
-    if request.method == "GET":
-        json_data = request.body
-        stream = io.BytesIO(json_data)
-        python_data = JSONParser().parse(stream)
-        id = python_data.get('id',None)
-        if id is not None:
-            stu = Student.objects.get(id = id)
-            serializer = StudentSerializer(stu)
-            json_data = JSONRenderer().render(serializer.data)
-            return HttpResponse(json_data, content_type = 'application/json')
-        else:
-            stu = Student.objects.all()
-            serializer = StudentSerializer(stu, many=True)
-            json_data = JSONRenderer().render(serializer.data)
-            return HttpResponse(json_data, content_type = 'application/json')
-    else:
-        print("Post request")
 
-@csrf_exempt
-def student_opr(request):
-    # ---------------- CREATE ----------------
-    if request.method == "POST":
-        stream = io.BytesIO(request.body)
-        dict_data = JSONParser().parse(stream)
-        serializer = StudentSerializer(data=dict_data)
+# ---------------- All Students (GET List) ----------------
+class StudentListAPI(APIView):
+    def get(self, request, format=None):
+        students = Student.objects.all()
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# ---------------- CRUD Operations ----------------
+class StudentCRUDAPI(APIView):
+    # CREATE
+    def post(self, request, format=None):
+        serializer = StudentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse({'msg': 'Data created'}, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            return Response({"msg": "Data created"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # ---------------- UPDATE ----------------
-    elif request.method == "PUT":
-        stream = io.BytesIO(request.body)
-        python_data = JSONParser().parse(stream)
-        id = python_data.get('id')
+    # UPDATE (partial update allowed)
+    def put(self, request, format=None):
+        student_id = request.data.get('id')
+        stu = get_object_or_404(Student, id=student_id)
 
-        try:
-            stu = Student.objects.get(id=id)
-        except Student.DoesNotExist:
-            return JsonResponse({"msg": "Student not found"}, status=404)
-
-        serializer = StudentSerializer(stu, data=python_data, partial=True)
+        serializer = StudentSerializer(stu, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse({"msg": "Updated Data"}, status=200)
-        return JsonResponse(serializer.errors, status=400)
+            return Response({"msg": "Updated Data"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # ---------------- DELETE ----------------
-    elif request.method == "DELETE":
-        stream = io.BytesIO(request.body)
-        python_data = JSONParser().parse(stream)
-        id = python_data.get('id')
-
-        try:
-            stu = Student.objects.get(id=id)
-            stu.delete()
-            return JsonResponse({"msg": "Student deleted"}, status=200)
-        except Student.DoesNotExist:
-            return JsonResponse({"msg": "Student not found"}, status=404)
-
-    # ---------------- METHOD NOT ALLOWED ----------------
-    return JsonResponse({"msg": "Method not allowed"}, status=405)
+    # DELETE
+    def delete(self, request, format=None):
+        student_id = request.data.get('id')
+        stu = get_object_or_404(Student, id=student_id)
+        stu.delete()
+        return Response({"msg": "Student deleted"}, status=status.HTTP_200_OK)

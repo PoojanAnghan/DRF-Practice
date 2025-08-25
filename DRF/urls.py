@@ -1,9 +1,8 @@
-from django.contrib import admin
 from django.urls import path
-from DRFApi.views import student_details, student_list, student_opr
+from DRFApi.views import StudentDetailAPI, StudentListAPI, StudentCRUDAPI
+
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("studentInfo/", student_list),
-    path("studentInfo/<int:pk>", student_details),
-    path("student/opr", student_opr)
+    path("student/<int:pk>/", StudentDetailAPI.as_view(), name="student-detail"),
+    path("students/", StudentListAPI.as_view(), name="student-list"),
+    path("student-crud/", StudentCRUDAPI.as_view(), name="student-crud"),
 ]
