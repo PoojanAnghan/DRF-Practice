@@ -11,6 +11,7 @@ from rest_framework.mixins import (
     DestroyModelMixin
 )
 from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 
 
 # -------------------- Simple Class APIview --------------------
@@ -72,30 +73,51 @@ from rest_framework.generics import GenericAPIView
 
 # -------------------- GenericAPIView with Mixins --------------------
 
-class LCStudentAPI(GenericAPIView, ListModelMixin, CreateModelMixin):
+# class LCStudentAPI(GenericAPIView, ListModelMixin, CreateModelMixin):
+#     queryset = Student.objects.all()
+#     serializer_class = StudentSerializer
+
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)  # ListModelMixin
+
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)  # CreateModelMixin
+
+# class RUDStudentAPI(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+#     queryset = Student.objects.all()
+#     serializer_class = StudentSerializer
+
+#     def get(self, request, *args, **kwargs):
+#         if "pk" in kwargs:  # /student-crud/<pk>/
+#             return self.retrieve(request, *args, **kwargs)
+#         return Response({"error": "Method not allowed"}, status=405)
+
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+
+#     def patch(self, request, *args, **kwargs):
+#         return self.partial_update(request, *args, **kwargs)
+
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
+
+
+class StudentListAPI(generics.ListAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)  # ListModelMixin
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)  # CreateModelMixin
-
-class RUDStudentAPI(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+class StudentCreateAPI(generics.CreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
-    def get(self, request, *args, **kwargs):
-        if "pk" in kwargs:  # /student-crud/<pk>/
-            return self.retrieve(request, *args, **kwargs)
-        return Response({"error": "Method not allowed"}, status=405)
+class StudentRetrieveAPI(generics.RetrieveAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+class StudentUpdateAPI(generics.UpdateAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
 
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+class StudentDeleteAPI(generics.DestroyAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
