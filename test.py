@@ -21,7 +21,7 @@ def add_student():
         'roll': 5,
         'city': 'Surat'
     }
-    res = requests.post(f"{BASE_URL}/students/", json=data)
+    res = requests.post(f"{BASE_URL}/student-crud/", json=data)
     print(res.json())
 
 
@@ -31,15 +31,15 @@ def update_student():
         'name': 'og',
         'roll': 5
     }
-    res = requests.put(f"{BASE_URL}/students/", json=data)
+    res = requests.put(f"{BASE_URL}/student-crud/", json=data)
     print(res.json())
 
 
 def delete_student():
     data = {
-        'id': 3
+        'id': 4
     }
-    res = requests.delete(f"{BASE_URL}/students/", json=data)
+    res = requests.delete(f"{BASE_URL}/student-crud/", json=data)
     print(res.json())
 
 

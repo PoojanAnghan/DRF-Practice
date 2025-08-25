@@ -22,11 +22,18 @@ class StudentSerializer(serializers.Serializer):
         return value
 
     def validate_name(self, value):
-        if not value.isalpha():
-            raise serializers.ValidationError("Name must only contain letters")
+        if not all(x.isalpha() or x.isspace() for x in value):
+            raise serializers.ValidationError("Name must only contain letters and spaces")
         return value
     
     def validate_city(self, value):
         if not isinstance(value, str):
             raise serializers.ValidationError("Invalid city name")
+        if not value.isalpha():
+            raise serializers.ValidationError("City must only contain letters")
         return value
+    
+    def validate(self, data):
+        if data['name'].lower() == data['city'].lower():
+            raise serializers.ValidationError("Name and city cannot be the same")
+        return data
