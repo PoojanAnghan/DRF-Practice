@@ -27,9 +27,6 @@ class StudentSerializer(serializers.Serializer):
         return value
     
     def validate_city(self, value):
-        if value is not str:
+        if not isinstance(value, str):
             raise serializers.ValidationError("Invalid city name")
         return value
-    
-    def validate(self, data):     # Data is the dictionary of the Field values
-        name = data.get
