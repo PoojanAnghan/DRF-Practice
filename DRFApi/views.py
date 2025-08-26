@@ -1,5 +1,7 @@
+from django.shortcuts import get_object_or_404
 from DRFApi.serializers import StudentSerializer
 from DRFApi.models import Student
+from rest_framework.views import APIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -113,10 +115,3 @@ class StudentRetrieveAPI(generics.RetrieveAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
-class StudentUpdateAPI(generics.UpdateAPIView):
-    queryset = Student.objects.all()
-    serializer_class = StudentSerializer
-
-class StudentDeleteAPI(generics.DestroyAPIView):
-    queryset = Student.objects.all()
-    serializer_class = StudentSerializer
