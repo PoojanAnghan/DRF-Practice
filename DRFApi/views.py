@@ -101,7 +101,6 @@ from rest_framework import generics
 #     def delete(self, request, *args, **kwargs):
 #         return self.destroy(request, *args, **kwargs)
 
-# ---------- Concreate class views --------------
 class StudentListAPI(generics.ListAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
