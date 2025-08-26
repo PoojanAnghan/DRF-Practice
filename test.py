@@ -1,46 +1,18 @@
 import requests
-import json
 
-# URL = 'http://127.0.0.1:8000/studentInfo/'
-# req = requests.get(URL)
-# data = req.json()
-# i = 0
-# for data in data:
-#     print("Student :", i+1)
-#     for key in data:
-#         print(f"{key} : {data[key]}")
+BASE_URL = 'http://127.0.0.1:8000'
 
 
-
-# print(f"{'-'*15} Single Record Access {'-'*15}")
-# URL = 'http://127.0.0.1:8000/studentInfo/1'
-# req = requests.get(URL)
-# data = req.json()
-
-# for key in data:
-#     print(f"{key} : {data[key]}")
-
-
-URL = 'http://127.0.0.1:8000/studentInfo/'
-def get_student_details(id = None):
-    data = {}
-    if id is not None:
-        data = {'id' : id}
-        json_data = json.dumps(data)
-        res =  requests.get(url= URL, data=json_data)
-        data = res.json()
-        print(data)
+def get_student_details(id=None):
+    if id:
+        res = requests.get(f"{BASE_URL}/students/{id}/")
     else:
-        data = {'id' : None}
-        json_data = json.dumps(data)
-        res =  requests.get(url= URL, data=json_data)
-        data = res.json()
-        print(data)
-
-# get_student_details()
-# get_student_details(4)
-
-URL = 'http://127.0.0.1:8000/student/opr'
+        res = requests.get(f"{BASE_URL}/students/")
+    
+    if res.status_code == 200:
+        print(res.json())
+    else:
+        print(f"Error: {res.status_code} - {res.text}")
 
 
 def add_student():
@@ -49,8 +21,9 @@ def add_student():
         'roll': 5,
         'city': 'Surat'
     }
-    res = requests.post(url=URL, json=data)   
-    print(res.json()['msg'])
+    res = requests.post(f"{BASE_URL}/student-crud/", json=data)
+    print(res.json())
+
 
 def update_student():
     data = {
@@ -58,18 +31,21 @@ def update_student():
         'name': 'og',
         'roll': 5
     }
-    res = requests.put(url=URL, json=data)  
-    print(res.json()['msg'])
+    res = requests.put(f"{BASE_URL}/student-crud/", json=data)
+    print(res.json())
+
 
 def delete_student():
     data = {
-        'id': 15
+        'id': 4
     }
-    res = requests.delete(url=URL, json=data) 
-    print(res.json()['msg'])
+    res = requests.delete(f"{BASE_URL}/student-crud/", json=data)
+    print(res.json())
 
 
-
+# ------------------ Run ------------------
+# get_student_details()
+# get_student_details(4)
 # add_student()
 # update_student()
 delete_student()
