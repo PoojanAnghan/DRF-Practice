@@ -33,5 +33,6 @@ router.register(r'students', Authentication_test, basename='student')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', include(router.urls)),
+    path('', include(router.urls)), 
+    path('auth/', include('rest_framework.urls'))  # Url for the session authentication -- add login/out button
 ]

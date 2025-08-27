@@ -16,8 +16,8 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework import mixins
-from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny, IsAuthenticatedOrReadOnly, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 # -------------------- Simple Class APIview --------------------
 
 class StudentCRUDAPI(APIView):
@@ -222,10 +222,25 @@ class StudentReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = StudentSerializer    
 
 
-# -------------------- Basic Authenication -------------------- 
+# -------------------- Authenication -------------------- 
 
 class Authentication_test(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAdminUser]
+    
+# -------------------- Basic Authenication -------------------- 
+    # authentication_classes = [BasicAuthentication]
+    # permission_classes = [IsAuthenticated] 
+    # permission_classes = [IsAdminUser]    
+    # permission_classes = [IsAuthenticatedOrReadOnly]  
+    permission_classes = [DjangoModelPermissions] 
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly] 
+    
+
+# -------------------- Session Authenication -------------------- 
+    authentication_classes = [SessionAuthentication]
+    # permission_classes = [IsAuthenticated] # Any Authenticated user acn access
+    # permission_classes = [IsAdminUser]    # Only Admin user can 
+    # permission_classes = [IsAuthenticatedOrReadOnly] # Is authentication failed then only safe opeartion can be performed 
+    permission_classes = [DjangoModelPermissions] # Give the accesses as defined in the user model in DB
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly] # Required permission for specific Opr. with successfull authentication -- Un-Authorized will have only Read-only permission
