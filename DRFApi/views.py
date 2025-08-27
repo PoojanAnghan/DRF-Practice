@@ -16,7 +16,8 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework import mixins
-
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 # -------------------- Simple Class APIview --------------------
 
 class StudentCRUDAPI(APIView):
@@ -214,8 +215,17 @@ class StudentModelViewSet(viewsets.ModelViewSet):
         response.data['message'] = "Student created successfully"
         return response
 
-# -------------------- ReadOnlyModelViewSet -------------------- # Seprate Viewset for only Read and Retrive data
+# -------------------- ReadOnlyModelViewSet -------------------- # Separate Viewset for only Read and Retrive data
 
 class StudentReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Student.objects.all()
+    serializer_class = StudentSerializer    
+
+
+# -------------------- Basic Authenication -------------------- 
+
+class Authentication_test(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAdminUser]

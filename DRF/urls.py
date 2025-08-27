@@ -3,6 +3,7 @@ from django.urls import path, include
 from DRFApi.views import LCStudentAPI, RUDStudentAPI   # ---- GenericClassview + Mixins
 from DRFApi.views import StudentCreateAPI, StudentListAPI, StudentRetrieveAPI, StudentUpdateAPI # StudentDeleteAPI  ---- Concreate View
 from DRFApi.views import StudentViewSet, StudentGenericViewSet # ---- ViewSet
+from DRFApi.views import Authentication_test # Class having an authentication
 from rest_framework.routers import DefaultRouter
 
 # -------------------  GenericClassview + Mixins -------------------
@@ -27,8 +28,8 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 # router.register(r'students', StudentViewSet, basename='student')
-router.register(r'students', StudentGenericViewSet, basename='student')
-
+# router.register(r'students', StudentGenericViewSet, basename='student')
+router.register(r'students', Authentication_test, basename='student')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
