@@ -5,8 +5,9 @@ from DRFApi.views import StudentCreateAPI, StudentListAPI, StudentRetrieveAPI, S
 from DRFApi.views import StudentViewSet, StudentGenericViewSet # ---- ViewSet
 from DRFApi.views import Authentication_test # Class having an authentication
 from rest_framework.routers import DefaultRouter
-
-# -------------------  GenericClassview + Mixins -------------------
+from rest_framework.authtoken.views import obtain_auth_token
+from DRFApi.auth import CustomToken
+#-------------------  GenericClassview + Mixins -------------------
 # urlpatterns = [ 
 #         path("admin/", admin.site.urls),
 #         path("student-crud/", LCStudentAPI.as_view(), name="student-list-create"),
@@ -26,14 +27,19 @@ from rest_framework.routers import DefaultRouter
 
 # ------------------- ViewSet(simple) -------------------
 
-router = DefaultRouter()
-# router.register(r'students', StudentViewSet, basename='student')
-# router.register(r'students', StudentGenericViewSet, basename='student')
-router.register(r'students', Authentication_test, basename='student')
+# router = DefaultRouter()
+# # router.register(r'students', StudentViewSet, basename='student')
+# # router.register(r'students', StudentGenericViewSet, basename='student')
+# router.register(r'students', Authentication_test, basename='student')
+
+# urlpatterns = [
+#     path("admin/", admin.site.urls),
+#     path('', include(router.urls)), 
+#     path('auth/', include('rest_framework.urls')),  # Url for the session authentication -- add login/out button
+# ]
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('', include(router.urls)), 
-    path('auth/', include('rest_framework.urls'))  # Url for the session authentication -- add login/out button
+    # path('gettoken/', obtain_auth_token),
+    path('admin/', admin.site.urls),
+    path('gettoken/', CustomToken.as_view())
 ]
-

@@ -16,7 +16,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework import mixins
-from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny, IsAuthenticatedOrReadOnly, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 from DRFApi.CustomPermission import CusPermissions
 # -------------------- Simple Class APIview --------------------
@@ -223,7 +223,7 @@ class StudentReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = StudentSerializer    
 
 
-# -------------------- Authenication -------------------- 
+# ------------------------------------------------------------ Authenication ------------------------------------------------------------ 
 
 class Authentication_test(viewsets.ModelViewSet):
     queryset = Student.objects.all()
@@ -248,5 +248,9 @@ class Authentication_test(viewsets.ModelViewSet):
 
 
 # -------------------- Custom Permissions --------------------
-    authentication_classes = [SessionAuthentication]
-    permission_classes=[CusPermissions]
+    # authentication_classes = [SessionAuthentication]
+    # permission_classes=[CusPermissions]
+
+# TokenAuthentication
+    authentication_classes = [TokenAuthentication]
+    permission_classes=[IsAuthenticated]
