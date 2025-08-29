@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Student
 
 class StudentSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=50)
     roll = serializers.IntegerField()
     city = serializers.CharField(max_length=50) 
@@ -34,6 +35,9 @@ class StudentSerializer(serializers.Serializer):
         return value
     
     def validate(self, data):
-        if data['name'].lower() == data['city'].lower():
+        name = data.get('name')
+        city = data.get('city')
+
+        if name and city and name.lower() == city.lower():
             raise serializers.ValidationError("Name and city cannot be the same")
         return data
