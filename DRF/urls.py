@@ -7,6 +7,7 @@ from DRFApi.views import Authentication_test # Class having an authentication
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 from DRFApi.auth import CustomToken
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshSlidingView, TokenVerifyView
 
 #-------------------  GenericClassview + Mixins -------------------
 # urlpatterns = [ 
@@ -39,9 +40,21 @@ router.register(r'students', Authentication_test, basename='student')
 #     path('auth/', include('rest_framework.urls')),  # Url for the session authentication -- add login/out button
 # ]
 
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('auth/', include('rest_framework.urls')),
+#     # path('gettoken/', CustomToken.as_view()),
+#     path('', include(router.urls)),
+# ]
+
+
+
+# ---------------------------- JWT Authentication ----------------------------
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('rest_framework.urls')),
-    # path('gettoken/', CustomToken.as_view()),
-    path('', include(router.urls)),
+    path('gettoken/', TokenObtainPairView.as_view(), name='gettoken'),
+    path('refreshtoken/', TokenRefreshSlidingView.as_view(), name='refreshtoken'),
+    path('tokenverify/', TokenVerifyView.as_view(), name='verifyToken'),
+    path('', include(router.urls))
 ]

@@ -20,6 +20,7 @@ from rest_framework.authentication import BasicAuthentication, SessionAuthentica
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny, IsAuthenticatedOrReadOnly, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 from DRFApi.CustomPermission import CusPermissions
 from .CustomAuthentication import CustomAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 # -------------------- Simple Class APIview --------------------
 
 class StudentCRUDAPI(APIView):
@@ -257,5 +258,10 @@ class Authentication_test(viewsets.ModelViewSet):
     # permission_classes=[IsAuthenticatedOrReadOnly]
 
 # -------------------- Custom Autthentication --------------------
-    authentication_classes = [CustomAuthentication]  
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [CustomAuthentication]  
+    # permission_classes = [IsAuthenticated]
+
+# -------------------- JWT Autthentication --------------------
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated] 
