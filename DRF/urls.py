@@ -27,10 +27,10 @@ from DRFApi.auth import CustomToken
 
 # ------------------- ViewSet(simple) -------------------
 
-# router = DefaultRouter()
+router = DefaultRouter()
 # # router.register(r'students', StudentViewSet, basename='student')
 # # router.register(r'students', StudentGenericViewSet, basename='student')
-# router.register(r'students', Authentication_test, basename='student')
+router.register(r'students', Authentication_test, basename='student')
 
 # urlpatterns = [
 #     path("admin/", admin.site.urls),
@@ -40,6 +40,9 @@ from DRFApi.auth import CustomToken
 
 urlpatterns = [
     # path('gettoken/', obtain_auth_token),
+    # path(''),
     path('admin/', admin.site.urls),
-    path('gettoken/', CustomToken.as_view())
+    path('auth/', include('rest_framework.urls')),
+    path('gettoken/', CustomToken.as_view()),
+    path('', include(router.urls)),
 ]

@@ -253,4 +253,4 @@ class Authentication_test(viewsets.ModelViewSet):
 
 # TokenAuthentication
     authentication_classes = [TokenAuthentication]
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticatedOrReadOnly]
