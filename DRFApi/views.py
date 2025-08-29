@@ -19,6 +19,7 @@ from rest_framework import mixins
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny, IsAuthenticatedOrReadOnly, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 from DRFApi.CustomPermission import CusPermissions
+from .CustomAuthentication import CustomAuthentication
 # -------------------- Simple Class APIview --------------------
 
 class StudentCRUDAPI(APIView):
@@ -251,6 +252,10 @@ class Authentication_test(viewsets.ModelViewSet):
     # authentication_classes = [SessionAuthentication]
     # permission_classes=[CusPermissions]
 
-# TokenAuthentication
-    authentication_classes = [TokenAuthentication]
-    permission_classes=[IsAuthenticatedOrReadOnly]
+# -------------------- TokenAuthentication --------------------
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes=[IsAuthenticatedOrReadOnly]
+
+# -------------------- Custom Autthentication --------------------
+    authentication_classes = [CustomAuthentication]  
+    permission_classes = [IsAuthenticated]
